@@ -110,3 +110,16 @@ di stato (veleno, stordimento), negozio, versione web/mobile, salvataggio su dat
 Fase attuale: completato (tutte le fasi 1-9 chiuse)
 (Aggiorna questa riga a fine di ogni fase, dopo il mio ok. All'inizio di ogni
 sessione riparti dalla fase indicata qui e rileggi AI_LOG.md.)
+
+## Modifiche dopo il completamento
+- Ogni nuova modifica va registrata in AI_LOG.md in una sezione "Modifiche successive",
+  con le stesse voci delle fasi (richiesta, prodotto dall'AI, mie modifiche).
+- Dopo ogni modifica: ./gradlew build verde, poi aggiorna anche le pagine della Wiki
+  interessate (wiki/ e AI_LOG.md devono restare coerenti con il codice).
+- Git: gh è installato in ~/.local/bin e Git lo usa per l'autenticazione, quindi basta
+  un normale `git push`.
+- Wiki: la Wiki di GitHub è un repository separato (rpg126231.wiki.git, branch master).
+  Dopo aver modificato wiki/, ripubblicala clonando quel repository, copiando wiki/*.md
+  e facendo commit e push.
+- Per chiudere un'istanza dell'app avviata per una verifica, termina solo il suo PID:
+  mai `pkill` generici, perché chiudono anche la partita che sto giocando io.
