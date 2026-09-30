@@ -10,6 +10,7 @@ import it.unicam.cs.mpgc.rpg126231.model.enemy.EnemyTemplate;
 import it.unicam.cs.mpgc.rpg126231.model.hero.Hero;
 import it.unicam.cs.mpgc.rpg126231.model.hero.Warrior;
 import it.unicam.cs.mpgc.rpg126231.model.item.Potion;
+import it.unicam.cs.mpgc.rpg126231.model.item.Weapon;
 import it.unicam.cs.mpgc.rpg126231.service.event.EventBus;
 import it.unicam.cs.mpgc.rpg126231.service.event.GameEvent;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,6 +32,7 @@ class GameSessionTest {
     private static final int LETHAL_DAMAGE = 1000;
     private static final int EXPERIENCE_PER_ENEMY = 60;
     private static final Potion POTION = new Potion("small_potion", "Pozione piccola", 30);
+    private static final Weapon SWORD = new Weapon("sword", "Spada", 5);
     private static final EnemyTemplate GOBLIN = new EnemyTemplate(
             "Goblin", new Stats(10, 1, 0), EXPERIENCE_PER_ENEMY, new AggressiveBehavior(), List.of(POTION));
     private static final EnemyTemplate GIANT = new EnemyTemplate(
@@ -69,6 +72,22 @@ class GameSessionTest {
         assertEquals(new DungeonProgress(1, 0), session.progress());
         assertTrue(published.contains(new GameEvent.ExperienceGained(EXPERIENCE_PER_ENEMY)));
         assertTrue(published.contains(new GameEvent.ItemLooted(POTION)));
+    }
+
+    @Test
+    void listenersSeeTheBattleClosedWhenRewardsArePublished() {
+        GameSession session = sessionIn(twoGoblinFloors());
+        List<Boolean> inBattleOnReward = new ArrayList<>();
+        events.subscribe(event -> {
+            if (event instanceof GameEvent.ExperienceGained) {
+                inBattleOnReward.add(session.isInBattle());
+            }
+        });
+
+        session.startNextBattle();
+        session.attack();
+
+        assertEquals(List.of(false), inBattleOnReward);
     }
 
     @Test
@@ -118,6 +137,19 @@ class GameSessionTest {
 
         assertTrue(session.isInBattle());
         assertTrue(published.contains(new GameEvent.ItemUsed(hero, POTION)));
+    }
+
+    @Test
+    void weaponCanBeEquippedOnlyBetweenBattles() {
+        GameSession session = sessionIn(twoGoblinFloors());
+        hero.inventory().add(SWORD);
+
+        session.startNextBattle();
+        assertThrows(IllegalStateException.class, () -> session.equip(SWORD));
+        session.attack();
+        session.equip(SWORD);
+
+        assertEquals(Optional.of(SWORD), hero.equippedWeapon());
     }
 
     @Test

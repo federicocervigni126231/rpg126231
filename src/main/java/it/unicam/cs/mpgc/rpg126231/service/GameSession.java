@@ -1,11 +1,13 @@
 package it.unicam.cs.mpgc.rpg126231.service;
 
+import it.unicam.cs.mpgc.rpg126231.model.combat.BattleOutcome;
 import it.unicam.cs.mpgc.rpg126231.model.combat.DamageResolver;
 import it.unicam.cs.mpgc.rpg126231.model.dungeon.Dungeon;
 import it.unicam.cs.mpgc.rpg126231.model.dungeon.DungeonProgress;
 import it.unicam.cs.mpgc.rpg126231.model.enemy.Enemy;
 import it.unicam.cs.mpgc.rpg126231.model.hero.Hero;
 import it.unicam.cs.mpgc.rpg126231.model.item.Consumable;
+import it.unicam.cs.mpgc.rpg126231.model.item.Weapon;
 import it.unicam.cs.mpgc.rpg126231.service.event.EventBus;
 import it.unicam.cs.mpgc.rpg126231.service.event.GameEvent;
 
@@ -102,6 +104,20 @@ public class GameSession {
     }
 
     /**
+     * Equipaggia un'arma dell'inventario. È possibile solo tra un combattimento e l'altro.
+     *
+     * @param weapon arma da equipaggiare
+     * @throws IllegalStateException    se è in corso un combattimento
+     * @throws IllegalArgumentException se l'arma non è nell'inventario
+     */
+    public void equip(Weapon weapon) {
+        if (battle != null) {
+            throw new IllegalStateException("Non si può cambiare arma durante un combattimento");
+        }
+        hero.equip(weapon);
+    }
+
+    /**
      * Restituisce il nemico del combattimento in corso.
      *
      * @return nemico, vuoto se non c'è un combattimento in corso
@@ -172,14 +188,19 @@ public class GameSession {
     }
 
     private void handleBattleEnd() {
-        switch (battle.outcome()) {
-            case ONGOING -> {
-                return;
-            }
-            case VICTORY -> rewardVictory(battle.enemy());
-            case DEFEAT -> endGame(new GameEvent.GameLost());
+        BattleOutcome outcome = battle.outcome();
+        if (outcome == BattleOutcome.ONGOING) {
+            return;
         }
+        // Il combattimento si chiude prima di pubblicare altri eventi, così gli
+        // ascoltatori vedono già lo stato successivo.
+        Enemy defeatedEnemy = battle.enemy();
         battle = null;
+        if (outcome == BattleOutcome.VICTORY) {
+            rewardVictory(defeatedEnemy);
+        } else {
+            endGame(new GameEvent.GameLost());
+        }
     }
 
     private void rewardVictory(Enemy enemy) {
