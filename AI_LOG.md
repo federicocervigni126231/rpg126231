@@ -49,7 +49,7 @@ Per ogni fase: cosa ho chiesto, cosa ha prodotto l'AI, cosa ho modificato io.
   finto (`RecordingDamageResolver`) per rendere prevedibili i test di abilità e nemici.
   Rispetto al design: aggiunti `Identifiable` (id comune per il `Registry`) e il record
   `Floor` (piano del dungeon).
-- **Mie modifiche:** _da compilare_
+- **Mie modifiche:** nessuna.
 
 ## Fase 5: Logica di gioco
 
@@ -61,7 +61,7 @@ Per ogni fase: cosa ho chiesto, cosa ha prodotto l'AI, cosa ho modificato io.
   nel package) e `GameSession` (Facade per la GUI: avvio dei combattimenti, esperienza,
   bottino, avanzamento, vittoria e sconfitta). Aggiunti `BattleOutcome` in `model.combat`
   e `Dungeon.contains`. 30 nuovi test (80 in totale).
-- **Mie modifiche:** _da compilare_
+- **Mie modifiche:** nessuna.
 
 ## Fase 6: Persistenza JSON
 
@@ -75,4 +75,19 @@ Per ogni fase: cosa ho chiesto, cosa ha prodotto l'AI, cosa ho modificato io.
   (classi, oggetti, 5 nemici, 5 piani) e `GameBootstrap` (composition root). Bilanciamento
   dei numeri tramite una simulazione Monte Carlo usa e getta (non inclusa nel progetto):
   modificate le statistiche di Mago e Ladro. 20 nuovi test (100 in totale).
-- **Mie modifiche:** _da compilare_
+- **Mie modifiche:** nessuna.
+
+## Fase 7: Interfaccia grafica JavaFX
+
+- **Richiesta:** GUI JavaFX con menu, creazione del personaggio, combattimento e inventario.
+- **Prodotto dall'AI:** package `ui.javafx` con `RpgApplication` (avvio tramite
+  `GameBootstrap`), `Navigator` (crea le schermate e le alterna in un'unica scena), `View`,
+  `MainMenuView`, `CharacterCreationView` (classi lette dal registro), `BattleView`
+  (ascoltatore degli eventi, pattern Observer), `InventoryView`, più `EventFormatter`
+  (eventi → messaggi), `HealthBar` e `Dialogs`; foglio di stile `style.css`. Aggiunto
+  `GameSession.equip` perché la GUI modifichi lo stato solo tramite il Facade.
+  Verifica visiva con un test temporaneo che fotografa ogni schermata (poi rimosso): ha
+  rivelato un bug in `GameSession` (gli eventi della ricompensa venivano pubblicati con il
+  combattimento ancora aperto), corretto e coperto da un test di regressione, e alcuni
+  difetti di layout. 102 test in totale.
+- **Mie modifiche:** nessuna.
