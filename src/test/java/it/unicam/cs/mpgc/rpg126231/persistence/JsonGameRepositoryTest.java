@@ -113,6 +113,14 @@ class JsonGameRepositoryTest {
     }
 
     @Test
+    void missingDataIsReported() throws IOException {
+        Files.createDirectories(file.getParent());
+        Files.writeString(file, "{ \"floor\": 0, \"encounter\": 0 }");
+
+        assertThrows(PersistenceException.class, repository::load);
+    }
+
+    @Test
     void unknownIdentifierIsReported() throws IOException {
         repository.save(new SavedGame(new Hero("Aldo", new Warrior()), DungeonProgress.START));
         Files.writeString(file, Files.readString(file).replace("warrior", "paladin"));

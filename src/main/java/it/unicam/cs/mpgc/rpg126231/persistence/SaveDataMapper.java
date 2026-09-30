@@ -56,16 +56,15 @@ class SaveDataMapper {
      *
      * @param data dati salvati
      * @return partita ricostruita
-     * @throws IllegalArgumentException se i dati non sono validi, per esempio un
-     *                                  identificativo sconosciuto o un'arma che non è un'arma
-     * @throws NullPointerException     se mancano dati obbligatori
+     * @throws IllegalArgumentException se i dati non sono validi, per esempio un dato mancante,
+     *                                  un identificativo sconosciuto o un'arma che non è un'arma
      */
     SavedGame fromData(SaveData data) {
-        SaveData.HeroData heroData = Objects.requireNonNull(data.hero(), "hero");
+        SaveData.HeroData heroData = required(data.hero(), "hero");
         Inventory inventory = new Inventory();
-        heroData.inventoryItemIds().forEach(id -> inventory.add(items.get(id)));
+        required(heroData.inventoryItemIds(), "inventoryItemIds").forEach(id -> inventory.add(items.get(id)));
         Hero hero = new Hero(
-                heroData.name(),
+                required(heroData.name(), "name"),
                 heroClasses.get(heroData.heroClassId()),
                 heroData.level(),
                 heroData.experience(),
@@ -80,5 +79,12 @@ class SaveDataMapper {
             return weapon;
         }
         throw new IllegalArgumentException("L'oggetto equipaggiato non è un'arma: " + id);
+    }
+
+    private static <T> T required(T value, String field) {
+        if (value == null) {
+            throw new IllegalArgumentException("Dato mancante nel salvataggio: " + field);
+        }
+        return value;
     }
 }

@@ -12,6 +12,7 @@ import it.unicam.cs.mpgc.rpg126231.service.SavedGame;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -43,14 +44,17 @@ public class JsonGameRepository implements GameRepository {
     @Override
     public void save(SavedGame game) {
         String json = gson.toJson(mapper.toData(game));
+        Path temporary = null;
         try {
             Path directory = file.toAbsolutePath().getParent();
             Files.createDirectories(directory);
-            Path temporary = Files.createTempFile(directory, "save", ".tmp");
+            temporary = Files.createTempFile(directory, "save", ".tmp");
             Files.writeString(temporary, json, StandardCharsets.UTF_8);
-            Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            replaceSaveWith(temporary);
         } catch (IOException e) {
-            throw new PersistenceException("Impossibile salvare la partita", e);
+            PersistenceException failure = new PersistenceException("Impossibile salvare la partita", e);
+            deleteLeftover(temporary, failure);
+            throw failure;
         }
     }
 
@@ -59,16 +63,44 @@ public class JsonGameRepository implements GameRepository {
         if (!exists()) {
             return Optional.empty();
         }
+        SaveData data;
         try {
-            SaveData data = gson.fromJson(Files.readString(file, StandardCharsets.UTF_8), SaveData.class);
-            return Optional.of(mapper.fromData(Objects.requireNonNull(data, "file vuoto")));
-        } catch (IOException | JsonParseException | IllegalArgumentException | NullPointerException e) {
+            data = gson.fromJson(Files.readString(file, StandardCharsets.UTF_8), SaveData.class);
+        } catch (IOException | JsonParseException e) {
             throw new PersistenceException("Il salvataggio non è leggibile", e);
+        }
+        if (data == null) {
+            throw new PersistenceException("Il salvataggio è vuoto");
+        }
+        try {
+            return Optional.of(mapper.fromData(data));
+        } catch (IllegalArgumentException e) {
+            throw new PersistenceException("Il salvataggio non è valido", e);
         }
     }
 
     @Override
     public boolean exists() {
         return Files.isRegularFile(file);
+    }
+
+    private void replaceSaveWith(Path temporary) throws IOException {
+        try {
+            Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (AtomicMoveNotSupportedException e) {
+            // Alcuni file system non supportano lo spostamento atomico: si ripiega su quello normale.
+            Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+
+    private static void deleteLeftover(Path temporary, Exception failure) {
+        if (temporary == null) {
+            return;
+        }
+        try {
+            Files.deleteIfExists(temporary);
+        } catch (IOException e) {
+            failure.addSuppressed(e);
+        }
     }
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 public class Hero extends Combatant {
 
     /** Esperienza necessaria per livello: dal livello N al successivo servono N volte questo valore. */
-    public static final int EXPERIENCE_PER_LEVEL = 100;
+    private static final int EXPERIENCE_PER_LEVEL = 100;
 
     private final HeroClass heroClass;
     private final Inventory inventory;
