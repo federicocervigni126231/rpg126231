@@ -1,0 +1,4 @@
+# Fine riga corretti per gli script del wrapper su ogni sistema operativo
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary

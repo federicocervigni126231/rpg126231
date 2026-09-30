@@ -1,0 +1,6 @@
+plugins {
+    // Scarica automaticamente il JDK richiesto dalla toolchain se non è installato.
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.10.0'
+}
+
+rootProject.name = 'rpg126231'
