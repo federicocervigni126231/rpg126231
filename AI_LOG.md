@@ -108,3 +108,14 @@ Per ogni fase: cosa ho chiesto, cosa ha prodotto l'AI, cosa ho modificato io.
   funzionasse con Java 25; la prova pratica ha smentito l'affermazione, e l'aggiornamento
   è stato mantenuto come misura preventiva.
 - **Mie modifiche:** nessuna.
+
+## Fase 9: Wiki
+
+- **Richiesta:** scrivere le pagine della Wiki GitHub in `wiki/`, una per ogni punto della
+  specifica, più la dichiarazione dettagliata sull'uso dell'AI.
+- **Prodotto dall'AI:** `Home`, `_Sidebar` (navigazione), `Funzionalita`, `Responsabilita`
+  (con diagramma delle dipendenze verificato sugli import reali), `Classi-e-interfacce`
+  (tre diagrammi Mermaid, tabella di ogni tipo, pattern e alternative scartate),
+  `Persistenza`, `Estendibilita` (punti di estensione e integrazione delle funzionalità
+  future), `Uso-AI` (dichiarazione basata su questo registro, con gli errori dell'AI emersi).
+- **Mie modifiche:** nessuna.

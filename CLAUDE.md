@@ -107,6 +107,6 @@ di stato (veleno, stordimento), negozio, versione web/mobile, salvataggio su dat
    specifica, più la dichiarazione dettagliata sull'uso dell'AI a partire da AI_LOG.md.
 
 ## Stato del progetto
-Fase attuale: 8
+Fase attuale: completato (tutte le fasi 1-9 chiuse)
 (Aggiorna questa riga a fine di ogni fase, dopo il mio ok. All'inizio di ogni
 sessione riparti dalla fase indicata qui e rileggi AI_LOG.md.)
