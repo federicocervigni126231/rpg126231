@@ -9,8 +9,8 @@ import it.unicam.cs.mpgc.rpg126231.model.combat.Stats;
  */
 public class Rogue implements HeroClass {
 
-    private static final Stats BASE_STATS = new Stats(95, 15, 6);
-    private static final Stats GROWTH = new Stats(12, 3, 1);
+    private static final Stats BASE_STATS = new Stats(100, 16, 6);
+    private static final Stats GROWTH = new Stats(12, 3, 2);
 
     private final Ability ability = new DoubleStrike();
 

@@ -62,3 +62,17 @@ Per ogni fase: cosa ho chiesto, cosa ha prodotto l'AI, cosa ho modificato io.
   bottino, avanzamento, vittoria e sconfitta). Aggiunti `BattleOutcome` in `model.combat`
   e `Dungeon.contains`. 30 nuovi test (80 in totale).
 - **Mie modifiche:** _da compilare_
+
+## Fase 6: Persistenza JSON
+
+- **Richiesta:** salvataggio e caricamento su file JSON dietro un'interfaccia repository.
+- **Prodotto dall'AI:** nel livello service `GameRepository` (interfaccia), `SavedGame`,
+  `PersistenceException` e `GameService` (nuova partita, carica, salva solo tra i
+  combattimenti); package `persistence` con `SaveData` (oggetti di trasferimento dati con
+  solo tipi semplici e identificativi), `SaveDataMapper` (conversione dominio ↔ dati con i
+  registri) e `JsonGameRepository` (Gson, scrittura su file temporaneo e sostituzione
+  atomica, errori tradotti in `PersistenceException`); package `app` con `GameContent`
+  (classi, oggetti, 5 nemici, 5 piani) e `GameBootstrap` (composition root). Bilanciamento
+  dei numeri tramite una simulazione Monte Carlo usa e getta (non inclusa nel progetto):
+  modificate le statistiche di Mago e Ladro. 20 nuovi test (100 in totale).
+- **Mie modifiche:** _da compilare_

@@ -9,8 +9,8 @@ import it.unicam.cs.mpgc.rpg126231.model.combat.Stats;
  */
 public class Mage implements HeroClass {
 
-    private static final Stats BASE_STATS = new Stats(80, 18, 4);
-    private static final Stats GROWTH = new Stats(10, 4, 1);
+    private static final Stats BASE_STATS = new Stats(90, 19, 6);
+    private static final Stats GROWTH = new Stats(10, 4, 2);
 
     private final Ability ability = new Fireball();
 
