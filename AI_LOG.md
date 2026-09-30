@@ -35,3 +35,18 @@ Per ogni fase: cosa ho chiesto, cosa ha prodotto l'AI, cosa ho modificato io.
   verificare `./gradlew run`.
 - **Mie modifiche:** nessuna. Ho chiesto all'AI di eseguire anche il primo commit e la
   pubblicazione su GitHub.
+
+## Fase 4: Dominio e test
+
+- **Richiesta:** implementare il dominio progettato in Fase 2, con test JUnit 5.
+- **Prodotto dall'AI:** package `model` con `Identifiable` e `Registry`; `model.combat`
+  (`Stats`, `Combatant`, `HitModifier`, `DamageResolver`); `model.item` (`Item`,
+  `Consumable`, `Potion`, `Weapon`, `Inventory`); `model.ability` (`Ability`,
+  `PowerStrike`, `Fireball`, `DoubleStrike`); `model.hero` (`HeroClass`, `Warrior`,
+  `Mage`, `Rogue`, `Hero`); `model.enemy` (`Enemy`, `EnemyBehavior`,
+  `AggressiveBehavior`, `BerserkerBehavior`, `EnemyTemplate`); `model.dungeon`
+  (`Dungeon`, `Floor`, `DungeonProgress`). 50 test JUnit 5, con un `DamageResolver`
+  finto (`RecordingDamageResolver`) per rendere prevedibili i test di abilità e nemici.
+  Rispetto al design: aggiunti `Identifiable` (id comune per il `Registry`) e il record
+  `Floor` (piano del dungeon).
+- **Mie modifiche:** _da compilare_
