@@ -91,3 +91,20 @@ Per ogni fase: cosa ho chiesto, cosa ha prodotto l'AI, cosa ho modificato io.
   combattimento ancora aperto), corretto e coperto da un test di regressione, e alcuni
   difetti di layout. 102 test in totale.
 - **Mie modifiche:** nessuna.
+
+## Fase 8: Revisione finale
+
+- **Richiesta:** controllo punto per punto della conformità alla specifica e code review
+  severa sui criteri di valutazione.
+- **Prodotto dall'AI:** verifica di package, visibilità del repository, clone pulito da
+  GitHub con `./gradlew build` e `./gradlew run`, assenza di codice morto e direzione delle
+  dipendenze tra livelli. Correzioni: `SaveDataMapper` segnala i dati mancanti con un
+  errore esplicito invece di affidarsi a `NullPointerException` (con test);
+  `JsonGameRepository` ripiega sullo spostamento non atomico dove non è supportato e
+  cancella il file temporaneo in caso di errore; `Hero.EXPERIENCE_PER_LEVEL` resa privata.
+  Wrapper aggiornato da Gradle 8.14.3 a 9.8.0 con verifica del checksum della
+  distribuzione, per avere il supporto ufficiale di Java 25-27; verificato build e avvio
+  anche con JDK 25. Nota: l'AI aveva inizialmente affermato che Gradle 8.14 non
+  funzionasse con Java 25; la prova pratica ha smentito l'affermazione, e l'aggiornamento
+  è stato mantenuto come misura preventiva.
+- **Mie modifiche:** nessuna.
