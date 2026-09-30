@@ -50,3 +50,15 @@ Per ogni fase: cosa ho chiesto, cosa ha prodotto l'AI, cosa ho modificato io.
   Rispetto al design: aggiunti `Identifiable` (id comune per il `Registry`) e il record
   `Floor` (piano del dungeon).
 - **Mie modifiche:** _da compilare_
+
+## Fase 5: Logica di gioco
+
+- **Richiesta:** implementare combattimento, livelli e inventario nel livello service, con test.
+- **Prodotto dall'AI:** package `service.event` (`GameEvent` sealed con gli eventi come
+  record annidati, `GameEventListener`, `EventBus`: pattern Observer); package `service`
+  con `DamageCalculator` (formula del danno, `RandomGenerator` iniettato), `LootGenerator`
+  (oggetti lasciati dai nemici), `Battle` (turni, ricarica dell'abilità, esito; visibile solo
+  nel package) e `GameSession` (Facade per la GUI: avvio dei combattimenti, esperienza,
+  bottino, avanzamento, vittoria e sconfitta). Aggiunti `BattleOutcome` in `model.combat`
+  e `Dungeon.contains`. 30 nuovi test (80 in totale).
+- **Mie modifiche:** _da compilare_

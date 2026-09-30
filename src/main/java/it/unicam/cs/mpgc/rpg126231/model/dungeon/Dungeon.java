@@ -65,9 +65,19 @@ public class Dungeon {
         return floors.size();
     }
 
+    /**
+     * Indica se la posizione corrisponde a un combattimento di questo dungeon.
+     *
+     * @param progress posizione da verificare
+     * @return {@code true} se la posizione è valida
+     */
+    public boolean contains(DungeonProgress progress) {
+        return progress.floor() < floors.size()
+                && progress.encounter() < floors.get(progress.floor()).encounters().size();
+    }
+
     private void requireInside(DungeonProgress progress) {
-        if (progress.floor() >= floors.size()
-                || progress.encounter() >= floors.get(progress.floor()).encounters().size()) {
+        if (!contains(progress)) {
             throw new IllegalArgumentException("Posizione fuori dal dungeon: " + progress);
         }
     }

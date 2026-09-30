@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DungeonTest {
 
@@ -45,6 +47,13 @@ class DungeonTest {
     @Test
     void nextIsEmptyAfterTheLastEncounter() {
         assertEquals(Optional.empty(), dungeon.next(new DungeonProgress(1, 0)));
+    }
+
+    @Test
+    void containsRecognisesValidPositions() {
+        assertTrue(dungeon.contains(new DungeonProgress(0, 1)));
+        assertFalse(dungeon.contains(new DungeonProgress(1, 1)));
+        assertFalse(dungeon.contains(new DungeonProgress(2, 0)));
     }
 
     @Test
